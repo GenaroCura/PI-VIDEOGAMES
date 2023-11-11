@@ -1,0 +1,12 @@
+.ContainerForm form{
+    width: 20rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.ContainerForm{
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
