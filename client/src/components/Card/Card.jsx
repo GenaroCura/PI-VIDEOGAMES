@@ -11,7 +11,8 @@ const Card = ({game}) => {
             <img src={game.image} alt="Imagen de un videoGame" />
             </Link>
             <h2>{game.name}</h2>
-            <h3>Genres: {game.genres.map(genre => genre.name).join(", ")}</h3>
+            <h3>Rating: {game.rating}</h3>
+            <h4>Genres: {game.genres.map(genre => genre.name).join(", ")}</h4>
         </div>
     )
 };

@@ -4,4 +4,6 @@ export const SEARCH_GAME = "SEARCH_GAME";
 export const DETAIL_GAME = "DETAIL_GAME";
 export const CLEAR_DETAIL = "CLEAR_DETAIL";
 export const PAGINATION = "PAGINATION";
-
+export const FILTER ="FILTER";
+export const FILTER_BY_GENRE = "FILTER_BY_GENRE";
+export const RESET = "RESET";

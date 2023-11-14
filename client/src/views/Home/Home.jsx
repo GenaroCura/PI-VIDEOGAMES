@@ -1,7 +1,7 @@
 import { useEffect} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CardsContainer from "../../components/CardsContainer/CardsContainer";
-import { getAllGames, changePage, getAllGenres} from "../../redux/actions/actions";
+import { getAllGames, changePage, getAllGenres, gamesFilter, filterByGenre, resetFilters} from "../../redux/actions/actions";
 
 const Home = () => {
   const dispatch = useDispatch(); //Le mando una actions a mi store.
@@ -12,7 +12,8 @@ const Home = () => {
 
 
   useEffect(() => {
-    dispatch(getAllGames());
+    if(!allGames.length){
+      dispatch(getAllGames())}
     dispatch(getAllGenres());
   }, [dispatch]);
 
@@ -23,16 +24,29 @@ const Home = () => {
     dispatch(changePage(event.target.name))
   };
 
+  const filtersOrder = (event) => {
+    dispatch(gamesFilter(event.target.value))
+  }
+
+  const filterGenres = (event) => {
+    dispatch(filterByGenre(event.target.value))
+  }
+
+  const restart = (event) =>{
+    dispatch(resetFilters())
+
+  };
+
   return (
     <div>
       <div><h3>Page: {currentPage + 1}</h3></div>
       <div>
-      <button onClick={() => dispatch(getAllGames())}>Reset VideoGames</button>
+      <button onClick={restart}>Reset VideoGames</button>
       <div>
       <h3>Filters:</h3>
           <select
             name="genre"
-            id="genre"
+            onChange={filterGenres}
           >
             <option value="All Genres">All Genres</option>
             {allGenres.map((genre) => (
@@ -40,6 +54,11 @@ const Home = () => {
                 {genre.name}
               </option>
             ))}
+          </select>
+          <select name="order" id="order" onChange={filtersOrder}>
+            <option defaultValue={"All"}>All</option>
+            <option value="AZ">A-Z</option>
+            <option value="ZA">Z-A</option>
           </select>
       </div>
         <button onClick={pagination} name="prev">{"<<"}</button>
