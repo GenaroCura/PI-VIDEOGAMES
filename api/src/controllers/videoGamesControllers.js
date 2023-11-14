@@ -12,73 +12,44 @@ const IMAGE_DEFAULT = require("../utils/IMAGE_DEFAULT");
 
 
  const getGameById = async (id) => {
-       //si el id tiene - significa que esta en la base de datos
+      //  si el id tiene - significa que esta en la base de datos
        const validate=id.includes("-")
        if (validate){
       
-           const data=await Videogame.findOne({where:{id:id},include:[
+           const dbGame=await Videogame.findOne(
+            {where:{ id: id},
+            include:[
                {
                  model: Genres,
                  attributes:["name"],
                  through:{attributes:[]}
                }
+
            ]});
-           
-           return data
+           return dbGame
        }
        else{
            //el game esta en la api
            const {data}=await axios(`https://api.rawg.io/api/games/${id}?key=${API_KEY}`)
            
            if (data){
-               
                const videoGame={
                            id:data.id,
                            name:data.name,
                            image:data.background_image,
                            platforms:data.platforms,
-                           description:data.description,
                            released:data.released,
                            rating:data.rating,
-                           genres:data.genres
+                           genres:data.genres,
+                           description:data.description,
                        }
-               
                return videoGame
            }
        }
 
- }
-//   const game =
-//     source === "api"
-//       ? (await axios.get(`https://api.rawg.io/api/games/${id}?key=${API_KEY}`))
-//           .data.results
-//       : await Videogame.findByPk(id, {
-//           include: {
-//             model: Genres,
-//             attributes: ["name"],
-//             through: {
-//               attributes: [],
-//             },
-//           },
-//         });
-//   if (source === "bdd") {
-//     return game;
-//   } else {
-//     return {
-//       id:game.id,
-//       name: game.name,
-//       image: game.background_image,
-//       released: game.released,
-//       rating: game.rating,
-//       platforms: game.platforms,
-//       genres: game.genres,
-//       created: false,
-//     };
-//   }
-// };
-
+}
 const getAllGame = async () => {
-  const games = [];
+  const gamesApi = [];
 
   // Me traigo los juegos de la base de datos
   const gameDB = await Videogame.findAll({
@@ -106,18 +77,16 @@ const getAllGame = async () => {
           image: game.background_image,
           released: game.released,
           rating: game.rating,
-          platforms: game.platforms.map((elem) => elem.platform.name).join(","),
-          genres: game.genres?.map((elem) => elem.name).join(", "),
+          platforms: game.platforms,
+          genres: game.genres,
           created: false,
         };
-        games.push(videoGame);
+        gamesApi.push(videoGame);
       });
     }
   }
-
-  // Concateno los juegos de la base de datos y los de la API
-  return gameDB.concat(games);
-};
+  return result = gameDB.concat(gamesApi)
+}
 
 const getGameByName = async (name) => {
   // Convierto el nombre a minúsculas para hacer una búsqueda sin distinción entre mayúsculas y minúsculas.
@@ -140,6 +109,7 @@ const getGameByName = async (name) => {
     },
   });
 
+
   for (let i = 1; i <= 5; i++) {
     const apiResponse = await axios.get(
       `https://api.rawg.io/api/games?name=${Name}&key=${API_KEY}&page=${i}`
@@ -156,7 +126,7 @@ const getGameByName = async (name) => {
   );
 
   const result = [...filteredGamesAPI, ...gamesDB];
-
+ 
   if (result.length > 0) {
     return result.slice(0, 15); // Limita el resultado a los primeros 15 juegos
   } else {

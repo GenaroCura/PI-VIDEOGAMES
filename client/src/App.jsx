@@ -2,7 +2,7 @@ import './App.css';
 import {Route, Routes, useLocation} from 'react-router-dom'; 
 import { Landing, Home, Detail , Form } from './views';
 import NavBar from './components/NavBar/NavBar';
-
+  
 function App() {
   //Utilizo  el useLocation para que mi navBar no se muestre en landingpage.
   const location = useLocation();

@@ -1,6 +1,6 @@
 .CardsContainer{
         display: flex;
-        margin: 30px ; 
+        margin: 20px ; 
         padding: 40px;
         flex-wrap: wrap;
         justify-content: center; 

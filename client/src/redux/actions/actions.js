@@ -1,5 +1,5 @@
 import axios from "axios";
-import { DETAIL_GAME, GET_ALLGAMES, GET_ALLGENRES, SEARCH_GAME } from "./actionsTypes";
+import { DETAIL_GAME, GET_ALLGAMES, GET_ALLGENRES, SEARCH_GAME, CLEAR_DETAIL, PAGINATION} from "./actionsTypes";
 
 export const getAllGames = () => {
     return async function (dispatch){
@@ -10,13 +10,21 @@ export const getAllGames = () => {
                 payload: data
             })
         } catch (error) {
-            throw  new Error(error);
+            console.log(error)
             
         }
     }
 };
 
+export const clearDetail = () => {
+    return (dispatch) => {
+      dispatch({
+        type: CLEAR_DETAIL,
+      });
+    };
+  };
 
+  
 export const getGameById = (id) => {
     return async function (dispatch){
         try {
@@ -41,7 +49,6 @@ export const searchGameName = (name) => {
                 type: SEARCH_GAME,
                 payload: response.data,
             })
-            console.log(response)
         } catch (error) {
             console.log(error)
             
@@ -66,13 +73,31 @@ export const getAllGenres = () => {
 };
 
 
-export const postVideoGame = (body) =>{
-    return async function (dispatch){
-        console.log(body)
+export const changePage = (order) => {
+    return async function(dispatch){
         try {
-            await axios.post("http://localhost:3001/videogames",body)
+            dispatch(
+                {
+                    type:PAGINATION,
+                    payload: order
+                }
+            )
         } catch (error) {
             console.log(error)
+            
+        }
+    }
+};
+
+
+export const postVideoGame = (body) =>{
+    return async function (dispatch){
+        try {
+            console.log(body)
+            await axios.post("http://localhost:3001/videogames",body)
+            alert("Successfully created videogame")
+        } catch (error) {
+            alert("The video game already exists")
             
         }
     }

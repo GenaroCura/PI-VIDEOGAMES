@@ -14,6 +14,7 @@ const getGenresController=async()=>{
 
     const genresArray= data.results.map(genres=>{
         const videoGame={
+            id: genres.id,
             name:genres.name
         }
         return videoGame
