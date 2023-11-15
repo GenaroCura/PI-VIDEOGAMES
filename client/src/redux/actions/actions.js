@@ -1,5 +1,5 @@
 import axios from "axios";
-import { DETAIL_GAME, GET_ALLGAMES, GET_ALLGENRES, SEARCH_GAME, CLEAR_DETAIL, PAGINATION, FILTER,FILTER_BY_GENRE, RESET} from "./actionsTypes";
+import { DETAIL_GAME, GET_ALLGAMES, GET_ALLGENRES, SEARCH_GAME, CLEAR_DETAIL, PAGINATION, FILTER,FILTER_BY_GENRE,FILTER_BY_ORIGIN} from "./actionsTypes";
 
 export const getAllGames = () => {
     return async function (dispatch){
@@ -107,15 +107,15 @@ export const filterByGenre = (value) => {
     }
 }
 
-export const resetFilters = () => {
-    return async function(dispatch){
-        dispatch({
-            type:RESET,
-        })
 
+export const filterByOrigin = (value) => {
+    return function(dispatch){
+        dispatch({
+            type:FILTER_BY_ORIGIN,
+            payload: value
+        })
     }
 }
-
 
 export const postVideoGame = (body) =>{
     return async function (dispatch){

@@ -7,7 +7,7 @@ import {
   PAGINATION,
   FILTER,
   FILTER_BY_GENRE,
-  RESET
+  FILTER_BY_ORIGIN,
 } from "./actions/actionsTypes";
 
 const inicialState = {
@@ -159,12 +159,28 @@ const rootReducer = (state = inicialState, action) => {
           currentPage:0,
           filters:true
         }
-
-      case RESET:
-        return{
-          ...state,
-          allGames: [...state.allGamesCopy].splice(0,ITEMS_PER_PAGE ),
-          allGamesFiltered: []
+      case FILTER_BY_ORIGIN:
+        switch(action.payload){
+          case "created":
+            let created = [...state.allGamesCopy].filter((game)=>game.created);
+            return{
+              ...state,
+              allGames:[...created].slice(0,ITEMS_PER_PAGE),
+              allGamesFiltered: created,
+              currentPage:0,
+              filters:true
+            };
+          case "api":
+            let api = [...state.allGamesCopy].filter((game)=>!game.created);
+            return{
+              ...state,
+              allGames:[...api].slice(0,ITEMS_PER_PAGE),
+              allGamesFiltered: api,
+              currentPage:0,
+              filters:true
+            };
+            default:
+              state;
         }
 
     default:

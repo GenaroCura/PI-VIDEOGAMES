@@ -36,6 +36,7 @@ const Form = () => {
 
   const formValidate = (state, name) => {
     const regexCharacter = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\\/\-]/; // Para validar que el campo no contenga caracteres especiales.
+    const regexSpace = /^[^\s].*$/; // valida que no haya un espacio al principio del string
     switch (name) {
       case "name":
         if (state.name === "")
@@ -44,6 +45,11 @@ const Form = () => {
           setErrors({
             ...errors,
             name: "*El nombre debe contener solo letras o números",
+          });
+          else if(!regexSpace.test(state.name))
+          setErrors({
+            ...errors,
+            name: "*El nombre debe comenzar con un carácter",
           });
         else if (state.name.length > 20)
           setErrors({
@@ -56,28 +62,34 @@ const Form = () => {
       case "description":
         if (state.description === "")
           setErrors({ ...errors, description: "*Este campo es requerido" });
+        else if(!regexSpace.test(state.description))
+        setErrors({
+          ...errors,
+          description: "*La descripcion debe comenzar con un carácter ",
+        });
+
         else if (state.description.length < 10)
-          setErrors({
-            ...errors,
-            description: "*Debe contener mas de 10 caracteres",
-          });
+        setErrors({
+      ...errors,
+      description: "*Debe contener mas de 10 caracteres",
+    });
         else setErrors({ ...errors, description: "" });
         break;
 
       case "released":
         if (state.released === "")
           setErrors({ ...errors, released: "*Este campo es requerido" });
-        else if (!/^\d{4}-\d{2}-\d{2}$/.test(state.released))
-          setErrors({
-            ...errors,
-            released: "*El Formato de fecha debe ser (YYYY-MM-DD)",
-          });
         else setErrors({ ...errors, released: "" });
         break;
 
       case "rating":
         if (state.rating === "")
           setErrors({ ...errors, rating: "*Este campo es requerido" });
+        else if(!regexSpace.test(state.rating))
+        setErrors({
+          ...errors,
+          rating: "*El rating debe comenzar con un carácter",
+        });
         else if (isNaN(parseInt(state.rating)))
           setErrors({
             ...errors,
@@ -95,7 +107,12 @@ const Form = () => {
       case "platforms":
         if (state.platforms === "")
           setErrors({ ...errors, platforms: "*Este campo es requerido" });
-        // else if(regexCharacter.test(state.platforms))setErrors({...errors, platforms:"*La plataforma debe contener solo letras o números"})
+        else if(regexCharacter.test(state.platforms))setErrors({...errors, platforms:"*La plataforma debe contener solo letras o números"})
+        else if(!regexSpace.test(state.platforms))
+        setErrors({
+          ...errors,
+          platforms: "*El nombre debe comenzar con un carácter",
+        });
         else setErrors({ ...errors, platforms: "" });
         break;
         case "genres":
@@ -179,7 +196,7 @@ const Form = () => {
         <input name="description" onChange={handleChange} type="text" />
         {errors.description}
         <label>Released:</label>
-        <input name="released" onChange={handleChange} type="text" />
+        <input name="released" onChange={handleChange} type="date" />
         {errors.released}
         <label>Rating:</label>
         <input name="rating" onChange={handleChange} type="text" />

@@ -1,7 +1,7 @@
 import { useEffect} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CardsContainer from "../../components/CardsContainer/CardsContainer";
-import { getAllGames, changePage, getAllGenres, gamesFilter, filterByGenre, resetFilters} from "../../redux/actions/actions";
+import { getAllGames, changePage, getAllGenres, gamesFilter, filterByGenre,filterByOrigin} from "../../redux/actions/actions";
 
 const Home = () => {
   const dispatch = useDispatch(); //Le mando una actions a mi store.
@@ -17,9 +17,6 @@ const Home = () => {
     dispatch(getAllGenres());
   }, [dispatch]);
 
-
-
-
   const pagination = (event) =>{
     dispatch(changePage(event.target.name))
   };
@@ -32,23 +29,22 @@ const Home = () => {
     dispatch(filterByGenre(event.target.value))
   }
 
-  const restart = (event) =>{
-    dispatch(resetFilters())
 
+  const filterOrigin = (event) => {
+    dispatch(filterByOrigin(event.target.value))
   };
-
+  
   return (
     <div>
-      <div><h3>Page: {currentPage + 1}</h3></div>
       <div>
-      <button onClick={restart}>Reset VideoGames</button>
+      <button onClick={() => dispatch(getAllGames())}>Reset VideoGames 🎮</button>
       <div>
       <h3>Filters:</h3>
           <select
             name="genre"
             onChange={filterGenres}
-          >
-            <option value="All Genres">All Genres</option>
+            >
+            <option disabled defaultValue={"All"}>All Genres</option>
             {allGenres.map((genre) => (
               <option key={genre.id} value={genre.name}>
                 {genre.name}
@@ -56,10 +52,16 @@ const Home = () => {
             ))}
           </select>
           <select name="order" id="order" onChange={filtersOrder}>
-            <option defaultValue={"All"}>All</option>
+            <option disabled defaultValue={"Order"}>Order</option>
             <option value="AZ">A-Z</option>
             <option value="ZA">Z-A</option>
           </select>
+          <select name="origin" onChange={filterOrigin}>
+            <option disabled defaultValue={"Origin"}>Origin</option>
+            <option value="api">By Api</option>
+            <option value="created">By DB</option>
+          </select>
+            <div><h3>Page: {currentPage + 1}</h3></div>
       </div>
         <button onClick={pagination} name="prev">{"<<"}</button>
         <button onClick={pagination} name="next">{">>"}</button> 
