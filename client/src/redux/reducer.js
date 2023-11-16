@@ -7,16 +7,20 @@ import {
   PAGINATION,
   FILTER,
   FILTER_BY_GENRE,
-  FILTER_BY_ORIGIN,
+  FILTER_BY_RATING,
 } from "./actions/actionsTypes";
 
 const inicialState = {
   allGames: [],
   allGamesCopy: [],
+
+
   allGenres: [],
 
   allGamesFiltered: [],//para guardar luego de un filtrado. Por ejemplo por name.
+
   filters: false,// para saber si hay un filtrado.
+
 
   detail: {}, //Para limpiar el detalle y volver a entrar.
   currentPage: 0,
@@ -94,7 +98,7 @@ const rootReducer = (state = inicialState, action) => {
       };
 
     case FILTER:
-      if (action.payload === "AZ") {
+       if (action.payload === "AZ") {
         let asc = [];
         if (state.filters) {
           asc = [...state.allGamesFiltered].sort((a, b) => {
@@ -108,7 +112,7 @@ const rootReducer = (state = inicialState, action) => {
             allGamesFiltered: asc,
             currentPage: 0,
           };
-        } else {
+        } else{
           asc = [...state.allGamesCopy].sort((a, b) => {
             if (a.name < b.name) return -1;
             if (a.name > b.name) return 1;
@@ -141,15 +145,15 @@ const rootReducer = (state = inicialState, action) => {
             if (a.name > b.name) return -1;
             return 0;
           });
+          
           return {
             ...state,
             allGames: [...desc].slice(0, ITEMS_PER_PAGE),
             allGamesCopy: desc,
             currentPage: 0,
           };
-        }
       }
-
+    }
       case FILTER_BY_GENRE:
         let genreFiltered = [...state.allGamesCopy].filter((game)=>game.genres?.map(elem=>elem.name).includes(action.payload));
         return {
@@ -159,29 +163,67 @@ const rootReducer = (state = inicialState, action) => {
           currentPage:0,
           filters:true
         }
-      case FILTER_BY_ORIGIN:
-        switch(action.payload){
-          case "created":
-            let created = [...state.allGamesCopy].filter((game)=>game.created);
-            return{
-              ...state,
-              allGames:[...created].slice(0,ITEMS_PER_PAGE),
-              allGamesFiltered: created,
-              currentPage:0,
-              filters:true
-            };
-          case "api":
-            let api = [...state.allGamesCopy].filter((game)=>!game.created);
-            return{
-              ...state,
-              allGames:[...api].slice(0,ITEMS_PER_PAGE),
-              allGamesFiltered: api,
-              currentPage:0,
-              filters:true
-            };
-            default:
-              state;
-        }
+        case FILTER_BY_RATING:
+          const ratingFilterType = action.payload;
+          let ratingFiltered = [...state.allGamesCopy]; // Usar allGamesCopy para asegurar que filtras desde todos los juegos
+        
+          if (state.filters) {
+            // Filtrar por rating solo si hay filtros previos
+            if (ratingFilterType === "high") {
+              ratingFiltered = [...state.allGamesFiltered].sort((a, b) => b.rating - a.rating);
+            } else if (ratingFilterType === "low") {
+              ratingFiltered = [...state.allGamesFiltered].sort((a, b) => a.rating - b.rating);
+            }
+          } else {
+            // Filtrar por rating desde todos los juegos si no hay filtros previos
+            if (ratingFilterType === "high") {
+              ratingFiltered = ratingFiltered.sort((a, b) => b.rating - a.rating);
+            } else if (ratingFilterType === "low") {
+              ratingFiltered = ratingFiltered.sort((a, b) => a.rating - b.rating);
+            }
+          }
+
+          return {
+            ...state,
+            allGames: [...ratingFiltered].slice(0, ITEMS_PER_PAGE),
+            allGamesFiltered: ratingFiltered,
+            currentPage: 0,
+            filters: true,
+        };
+        
+  // case FILTER_BY_ORIGIN:
+  // switch (action.payload) {
+  //   case "created":
+  //     let created = [...state.allGamesCopy].filter((game) => game.created);
+  //     return {
+  //       ...state,
+  //       allGames: [...created].slice(0, ITEMS_PER_PAGE),
+  //       allGamesFiltered: created,
+  //       currentPage: 0,
+  //       filters: true,
+  //     };
+  //   case "api":
+  //     let api = [...state.allGamesCopy].filter((game) => !game.created);
+  //     return {
+  //       ...state,
+  //       allGames: [...api].slice(0, ITEMS_PER_PAGE),
+  //       allGamesFiltered: api,
+  //       currentPage: 0,
+  //       filters: true,
+  //     };
+  //   case "all":
+  //     return {
+  //       ...state,
+  //       allGames: [...state.allGamesCopy].slice(0, ITEMS_PER_PAGE),
+  //       allGamesFiltered: state.allGamesCopy,
+  //       currentPage: 0,
+  //       filters: true,
+  //     };
+
+
+  //   default:
+  //     return state;
+  // }
 
     default:
       return {

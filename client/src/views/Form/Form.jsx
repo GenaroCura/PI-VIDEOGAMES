@@ -26,7 +26,7 @@ const Form = () => {
   const [errors, setErrors] = useState({
     // siempre su valor va a ser un string, y siempre va a almacenar errores.
     name: "*Este campo es requerido",
-    image: "",
+    image: "Si no colocas una imagen, se te colocara una por default",
     description: "*Este campo es requerido",
     released: "*Este campo es requerido",
     rating: "*Este campo es requerido",
@@ -116,9 +116,9 @@ const Form = () => {
         else setErrors({ ...errors, platforms: "" });
         break;
         case "genres":
-      if (state.genres.length === 0) {
+      if (state.genres.length === 0) 
         setErrors({ ...errors, genres: "*Al menos un género es requerido" });
-      } else {
+      else {
         setErrors({ ...errors, genres: "" });
       }
       break;
@@ -153,19 +153,39 @@ const Form = () => {
 
   const handleAddGenre = () => {
     const genreValue = document.getElementById("genres").value;
-    if (genreValue) {
-      setState((prevState) => ({
-        ...prevState,
-        genres: [...prevState.genres, genreValue],
-      }));
-      
-      // Limpiar mensaje de error al agregar un género
-      setErrors({ ...errors, genres: "" });
-      
-      // Limpiar el campo de selección de géneros
-      document.getElementById("genres").value = "";
+    const genreSelect = allGenres.find(genre => genre.id === parseInt(genreValue));
+
+
+    //verifico que el genero que voy agregar no este ya agregado.
+    const genreADD = state.genres.some((addedGenre) => addedGenre === genreSelect.name);
+
+    if (genreSelect) {
+      if (!genreADD) {
+        setState((prevState) => ({
+          ...prevState,
+          genres: [...prevState.genres, genreSelect.name],
+        }));
+  
+        // Limpiar mensaje de error al agregar un género
+        setErrors({ ...errors, genres: "" });
+  
+        // Limpiar el campo de selección de géneros
+        document.getElementById("genres").value = "";
+      } else {
+        // Mostrar mensaje de error si el género ya está agregado
+        setErrors({ ...errors, genres: "Este género ya ha sido agregado." });
+
+        document.getElementById("genres").value = "";
+      }
     }
   };
+
+  const handleRemoveGenre = (i) => {
+    const updatedGenres = [...state.genres];
+  updatedGenres.splice(i, 1);
+  setState((prevState) => ({ ...prevState, genres: updatedGenres }));
+  };
+
 
   const disabledSubmit = () => {
     let disabled = true;
@@ -207,7 +227,7 @@ const Form = () => {
         {errors.platforms}
 
         <label>Genres:</label>
-        <select name="genres" id="genres">
+        <select name="genre" id="genres">
           <option selected="selected" disabled="disabled">
             Select genres
           </option>
@@ -220,8 +240,15 @@ const Form = () => {
         <button name="genres" type="button" onClick={handleAddGenre}>
           Add genres
         </button>
+        {state.genres.map((genreSelect, i) => (
+          <span key={i}>{genreSelect}
+           <button type="button" onClick={() => handleRemoveGenre(i)}>
+            X
+           </button>
+           </span>
+          ))}
         {errors.genres} 
-
+ 
 
 
 

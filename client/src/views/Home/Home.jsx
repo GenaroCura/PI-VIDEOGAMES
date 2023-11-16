@@ -1,14 +1,13 @@
-import { useEffect} from "react";
+import { useEffect , useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CardsContainer from "../../components/CardsContainer/CardsContainer";
-import { getAllGames, changePage, getAllGenres, gamesFilter, filterByGenre,filterByOrigin} from "../../redux/actions/actions";
+import { getAllGames, changePage, getAllGenres, gamesFilter, filterByGenre,filterByRating} from "../../redux/actions/actions";
 
 const Home = () => {
   const dispatch = useDispatch(); //Le mando una actions a mi store.
   const allGames = useSelector((state) => state.allGames); // Quiero que estes atento a cualquier cambio que ocurre en allGames.
-  const currentPage = useSelector((state) => state.currentPage)
   const allGenres = useSelector((state) => state.allGenres)
-
+  const currentPage = useSelector((state) => state.currentPage)
 
 
   useEffect(() => {
@@ -16,6 +15,8 @@ const Home = () => {
       dispatch(getAllGames())}
     dispatch(getAllGenres());
   }, [dispatch]);
+
+
 
   const pagination = (event) =>{
     dispatch(changePage(event.target.name))
@@ -30,9 +31,26 @@ const Home = () => {
   }
 
 
-  const filterOrigin = (event) => {
-    dispatch(filterByOrigin(event.target.value))
-  };
+  
+  const filterRating = (event) =>{
+    dispatch(filterByRating(event.target.value))
+  }
+  
+  //Aplico Esto para realizar la busqueda por origen.
+  const [selectedOrigin, setSelectedOrigin] = useState("all");
+  
+const filteredByOrigin = allGames.filter(game => {
+  if (selectedOrigin === "db"){
+    return game.created === true;
+  }else if (selectedOrigin === "api"){
+    return game.created === false;
+  }
+  return true
+})
+
+const filterOrigin = (event) => {
+  setSelectedOrigin(event.target.value)
+};
   
   return (
     <div>
@@ -44,7 +62,7 @@ const Home = () => {
             name="genre"
             onChange={filterGenres}
             >
-            <option disabled defaultValue={"All"}>All Genres</option>
+            <option disabled selected defaultValue={"All"}>All 🧬</option>
             {allGenres.map((genre) => (
               <option key={genre.id} value={genre.name}>
                 {genre.name}
@@ -52,21 +70,26 @@ const Home = () => {
             ))}
           </select>
           <select name="order" id="order" onChange={filtersOrder}>
-            <option disabled defaultValue={"Order"}>Order</option>
+            <option value="all"  disabled>All 🕹</option>
             <option value="AZ">A-Z</option>
             <option value="ZA">Z-A</option>
           </select>
           <select name="origin" onChange={filterOrigin}>
-            <option disabled defaultValue={"Origin"}>Origin</option>
+            <option value="all">All Origin ⚙</option>
             <option value="api">By Api</option>
-            <option value="created">By DB</option>
+            <option value="db">By DB</option>
           </select>
-            <div><h3>Page: {currentPage + 1}</h3></div>
+          <select name="rating" id="rating" onChange={filterRating}>Rating
+          <option value="all" disabled>All rating 🔥</option>
+          <option value="high">Rating high</option>
+          <option value="low">Rating low</option>
+          </select>
       </div>
+            <div><h3>{currentPage + 1}</h3></div>
         <button onClick={pagination} name="prev">{"<<"}</button>
         <button onClick={pagination} name="next">{">>"}</button> 
       </div>
-      <CardsContainer allGames={allGames} />  
+      <CardsContainer allGames={filteredByOrigin} />  
     </div>
   );
 };

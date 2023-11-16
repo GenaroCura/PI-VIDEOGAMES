@@ -29,7 +29,7 @@ module.exports = (sequelize) => {
       },
     },
     released:{
-      type: DataTypes.STRING,
+      type: DataTypes.DATE,
       allowNull: false,
     },
     rating:{
