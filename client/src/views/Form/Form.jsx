@@ -19,7 +19,7 @@ const Form = () => {
     description: "",
     released: "",
     rating: "",
-    platforms: "",
+    platforms: [],
     genres: [],
   });
 
@@ -34,9 +34,13 @@ const Form = () => {
     genres: "*El videojuego debe tener al menos 1 genero",
   });
 
+  
+
+  //Validaciones
   const formValidate = (state, name) => {
     const regexCharacter = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\\/\-]/; // Para validar que el campo no contenga caracteres especiales.
     const regexSpace = /^[^\s].*$/; // valida que no haya un espacio al principio del string
+    const regexUrl = /^https:\/\/.*\.(jpg|png)$/; // valida que la imagen sea una url y empiece con https y termine en jpg o png
     switch (name) {
       case "name":
         if (state.name === "")
@@ -51,12 +55,28 @@ const Form = () => {
             ...errors,
             name: "*El nombre debe comenzar con un carácter",
           });
-        else if (state.name.length > 20)
+        else if (state.name.length > 30)
           setErrors({
             ...errors,
-            name: "*Debe contener menos de 20 caracteres",
+            name: "*Debe contener menos de 30 caracteres",
           });
         else setErrors({ ...errors, name: "" });
+        break;
+
+        case "image":
+        if (state.image === "") {
+          setErrors({
+            ...errors,
+            image: "*Si no colocas una imagen, se te colocará una por defecto",
+          });
+        } else if (!regexUrl.test(state.image)) {
+          setErrors({
+            ...errors,
+            image: "La URL de la imagen no es válida (debe comenzar con https y terminar en jpg o png)",
+          });
+        } else {
+          setErrors({ ...errors, image: "" });
+        }
         break;
 
       case "description":
@@ -123,23 +143,32 @@ const Form = () => {
       }
       break;
     }
-  };
+};
+
+ 
 
   const handleChange = (event) => {
-    const { name, value } = event.target;
-
-    if (name === "genres") {
-      setState((prevState) => ({
-        ...prevState,
-        [name]: [...prevState[name], value],
-      }));
-      document.getElementById(name).value = "";
-    } else {
-      setState((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
+    console.log(event)
+    if(event.target.name === "platforms"){
+      
+      setState({
+        ...state,
+        platforms: [...state.platforms, document.getElementById("platforms").value]
+      })
+      document.getElementById("platforms").value = "";
+    }else if (event.target.name === "genres" ){
+      setState({
+        ...state,
+        genres: [...state.genres, event.target.value]
+      })
     }
+
+    else{ 
+    setState({
+      ...state,
+      [event.target.name]: event.target.value
+    }) }
+
 
     //re-rendering
     formValidate(
@@ -151,53 +180,6 @@ const Form = () => {
     );
   };
 
-  const handleAddGenre = () => {
-    const genreValue = document.getElementById("genres").value;
-    const genreSelect = allGenres.find(genre => genre.id === parseInt(genreValue));
-
-
-    //verifico que el genero que voy agregar no este ya agregado.
-    const genreADD = state.genres.some((addedGenre) => addedGenre === genreSelect.name);
-
-    if (genreSelect) {
-      if (!genreADD) {
-        setState((prevState) => ({
-          ...prevState,
-          genres: [...prevState.genres, genreSelect.name],
-        }));
-  
-        // Limpiar mensaje de error al agregar un género
-        setErrors({ ...errors, genres: "" });
-  
-        // Limpiar el campo de selección de géneros
-        document.getElementById("genres").value = "";
-      } else {
-        // Mostrar mensaje de error si el género ya está agregado
-        setErrors({ ...errors, genres: "Este género ya ha sido agregado." });
-
-        document.getElementById("genres").value = "";
-      }
-    }
-  };
-
-  const handleRemoveGenre = (i) => {
-    const updatedGenres = [...state.genres];
-  updatedGenres.splice(i, 1);
-  setState((prevState) => ({ ...prevState, genres: updatedGenres }));
-  };
-
-
-  const disabledSubmit = () => {
-    let disabled = true;
-    for (let error in errors) {
-      if (errors[error] === "") disabled = false;
-      else {
-        disabled = true;
-        break;
-      }
-    }
-    return disabled;
-  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -207,11 +189,13 @@ const Form = () => {
   return (
     <div className={style.ContainerForm}>
       <form onSubmit={handleSubmit}>
+       {console.log(state)}
         <label>Name:</label>
         <input name="name" onChange={handleChange} type="text" />
         {errors.name}
         <label>Image:</label>
         <input name="image" onChange={handleChange} type="text" />
+        {errors.image}
         <label>Description:</label>
         <input name="description" onChange={handleChange} type="text" />
         {errors.description}
@@ -223,36 +207,22 @@ const Form = () => {
         {errors.rating}
 
         <label>Platforms:</label>
-        <input name="platforms" onChange={handleChange} type="text"></input>
+        <input name="platforms" type="text" id="platforms"></input>
+        <button type="button" name="platforms" onClick={handleChange}>Add platforms</button>
         {errors.platforms}
 
         <label>Genres:</label>
-        <select name="genre" id="genres">
+        <select onChange={handleChange} name="genres">
           <option selected="selected" disabled="disabled">
             Select genres
           </option>
           {allGenres.map((genre) => (
-            <option key={genre.id} value={genre.id}>
+            <option key={genre.id} value={genre.name}>
               {genre.name}
             </option>
           ))}
         </select>
-        <button name="genres" type="button" onClick={handleAddGenre}>
-          Add genres
-        </button>
-        {state.genres.map((genreSelect, i) => (
-          <span key={i}>{genreSelect}
-           <button type="button" onClick={() => handleRemoveGenre(i)}>
-            X
-           </button>
-           </span>
-          ))}
-        {errors.genres} 
- 
-
-
-
-        <input disabled={disabledSubmit()} type="submit" />
+        <input type="submit" />
       </form>
     </div>
   );
