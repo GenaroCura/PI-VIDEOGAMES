@@ -14,12 +14,27 @@ const Detail = () => {
     return () => {
       dispatch(clearDetail());
     };
-  }, [dispatch, id]);
-
+  }, []);
 
   const handleBack = () => {
-    navigate(-1)
-  }
+    navigate(-1);
+  };
+
+  const renderPlatforms = () => {
+    if (detail.platforms && detail.platforms.length > 0) {
+      return detail.platforms.map((platform) => {
+        if (typeof platform === "string") {
+          // Si es una cadena (proviene de la base de datos)
+          return platform;
+        } else if (platform.platform && platform.platform.name) {
+          // Si es un objeto (proviene de la API)
+          return platform.platform.name;
+        }
+        return null;
+      }).filter(platform => platform).join(", ");
+    }
+    return "Not available";
+  };
 
   return (
     <div>
@@ -28,8 +43,8 @@ const Detail = () => {
       <h2>{detail.name}</h2>
       <h3>Rating: {detail.rating}</h3>
       <h3>Released: {detail.released}</h3>
-      <h3>Platforms: {Array.isArray(detail.platforms) ? detail.platforms.map(platform => platform.platform.name).join(", ") : detail.platforms}</h3>
-      <h3>Genres: {detail.genres && Array.isArray(detail.genres) && detail.genres.map(genre => genre.name).join(", ")}</h3>
+      <h3>Platforms: {renderPlatforms()}</h3>
+      <h3>Genres: {detail.genres?.map((genre) => genre.name).join(", ")}</h3>
       <p>{detail.description}</p>
       <button onClick={handleBack}>Back</button>
     </div>

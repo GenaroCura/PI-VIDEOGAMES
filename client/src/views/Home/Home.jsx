@@ -11,7 +11,7 @@ const Home = () => {
 
 
   useEffect(() => {
-    if(!allGames.length){
+    if(!allGames.length){ 
       dispatch(getAllGames())}
     dispatch(getAllGenres());
   }, [dispatch]);
@@ -35,7 +35,7 @@ const Home = () => {
   const filterRating = (event) =>{
     dispatch(filterByRating(event.target.value))
   }
-  
+
   //Aplico Esto para realizar la busqueda por origen.
   const [selectedOrigin, setSelectedOrigin] = useState("all");
   
@@ -48,9 +48,9 @@ const filteredByOrigin = allGames.filter(game => {
   return true
 })
 
-const filterOrigin = (event) => {
+const filterOrigin = (event)=> {
   setSelectedOrigin(event.target.value)
-};
+}
   
   return (
     <div>

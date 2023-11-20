@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import {
   DETAIL_GAME,
   GET_ALLGAMES,
@@ -21,6 +22,8 @@ const inicialState = {
 
   filters: false,// para saber si hay un filtrado.
 
+  allPlatforms: [], // Me voy a guardar las plataformas de los videojuegos pedidos a la api aca.
+
 
   detail: {}, //Para limpiar el detalle y volver a entrar.
   currentPage: 0,
@@ -30,6 +33,21 @@ const rootReducer = (state = inicialState, action) => {
   const ITEMS_PER_PAGE = 15;
   switch (action.type) {
     case GET_ALLGAMES:
+
+    const gamePlatforms = new Set();
+
+    action.payload.forEach(game =>{
+      if (Number.isInteger(game.id)){
+        game.platforms.forEach((platforms)=>{
+          if(platforms.platform.name){
+            gamePlatforms.add(platforms.platform.name)
+          }
+        })
+      }
+    })
+
+    console.log("Plataformas obtenidas:", gamePlatforms);
+
       return {
         ...state,
         allGames: [...action.payload].splice(0, ITEMS_PER_PAGE), //allGames === 15
@@ -37,6 +55,7 @@ const rootReducer = (state = inicialState, action) => {
         allGamesFiltered: [], 
         filters: false, 
         currentPage: 0,
+        allPlatforms: [...gamePlatforms],
       };
 
     case SEARCH_GAME:
@@ -52,6 +71,7 @@ const rootReducer = (state = inicialState, action) => {
         ...state,
         allGenres: action.payload,
       };
+  
     case DETAIL_GAME:
       return {
         ...state,
@@ -190,40 +210,6 @@ const rootReducer = (state = inicialState, action) => {
             currentPage: 0,
             filters: true,
         };
-        
-  // case FILTER_BY_ORIGIN:
-  // switch (action.payload) {
-  //   case "created":
-  //     let created = [...state.allGamesCopy].filter((game) => game.created);
-  //     return {
-  //       ...state,
-  //       allGames: [...created].slice(0, ITEMS_PER_PAGE),
-  //       allGamesFiltered: created,
-  //       currentPage: 0,
-  //       filters: true,
-  //     };
-  //   case "api":
-  //     let api = [...state.allGamesCopy].filter((game) => !game.created);
-  //     return {
-  //       ...state,
-  //       allGames: [...api].slice(0, ITEMS_PER_PAGE),
-  //       allGamesFiltered: api,
-  //       currentPage: 0,
-  //       filters: true,
-  //     };
-  //   case "all":
-  //     return {
-  //       ...state,
-  //       allGames: [...state.allGamesCopy].slice(0, ITEMS_PER_PAGE),
-  //       allGamesFiltered: state.allGamesCopy,
-  //       currentPage: 0,
-  //       filters: true,
-  //     };
-
-
-  //   default:
-  //     return state;
-  // }
 
     default:
       return {

@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 import axios from "axios";
 import { DETAIL_GAME, GET_ALLGAMES, GET_ALLGENRES, SEARCH_GAME, CLEAR_DETAIL, PAGINATION, FILTER,FILTER_BY_GENRE,FILTER_BY_RATING} from "./actionsTypes";
 
@@ -106,17 +107,6 @@ export const filterByGenre = (value) => {
         })
     }
 }
-
-
-// export const filterByOrigin = (value) => {
-//     return function(dispatch){
-//         dispatch({
-//             type:FILTER_BY_ORIGIN,
-//             payload: value
-//         })
-//     }
-// }
-
 export const filterByRating = (value) => {
     return function(dispatch){
         dispatch({
@@ -127,13 +117,14 @@ export const filterByRating = (value) => {
 };
 
 export const postVideoGame = (body) =>{
+    // eslint-disable-next-line no-unused-vars
     return async function (dispatch){
         try {
             console.log(body)
             await axios.post("http://localhost:3001/videogames",body)
             alert("Successfully created videogame")
         } catch (error) {
-            alert("The video game already exists")
+            alert("Error al crear un videogame")
             
         }
     }
