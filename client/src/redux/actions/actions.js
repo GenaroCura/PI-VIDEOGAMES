@@ -1,6 +1,6 @@
 /* eslint-disable no-empty */
 import axios from "axios";
-import { DETAIL_GAME, GET_ALLGAMES, GET_ALLGENRES, SEARCH_GAME, CLEAR_DETAIL, PAGINATION, FILTER,FILTER_BY_GENRE,FILTER_BY_RATING} from "./actionsTypes";
+import { DETAIL_GAME, GET_ALLGAMES, GET_ALLGENRES, SEARCH_GAME, CLEAR_DETAIL, PAGINATION, FILTER,FILTER_BY_GENRE,FILTER_BY_RATING, FILTER_BY_ORIGIN} from "./actionsTypes";
 
 export const getAllGames = () => {
     return async function (dispatch){
@@ -127,5 +127,15 @@ export const postVideoGame = (body) =>{
             alert("Error al crear un videogame")
             
         }
+    }
+};
+
+
+export const filterByOrigin = (origin) => {
+    return function (dispatch){
+        dispatch({
+            type: FILTER_BY_ORIGIN,
+            payload: origin
+        })
     }
 };

@@ -9,6 +9,7 @@ import {
   FILTER,
   FILTER_BY_GENRE,
   FILTER_BY_RATING,
+  FILTER_BY_ORIGIN,
 } from "./actions/actionsTypes";
 
 const inicialState = {
@@ -45,8 +46,6 @@ const rootReducer = (state = inicialState, action) => {
         })
       }
     })
-
-    console.log("Plataformas obtenidas:", gamePlatforms);
 
       return {
         ...state,
@@ -207,6 +206,33 @@ const rootReducer = (state = inicialState, action) => {
             ...state,
             allGames: [...ratingFiltered].slice(0, ITEMS_PER_PAGE),
             allGamesFiltered: ratingFiltered,
+            currentPage: 0,
+            filters: true,
+        };
+
+        case FILTER_BY_ORIGIN:
+          const filterOriginType = action.payload;
+          let originFiltered = [];
+        
+          if (filterOriginType === "all") {
+            // Si es "All Origin", mostrar todos los juegos sin filtrar por origen
+            originFiltered = state.filters ? [...state.allGamesFiltered] : [...state.allGamesCopy];
+          } else {
+            // Filtrar por el origen seleccionado
+            originFiltered = state.filters
+              ? [...state.allGamesFiltered].filter((game) => game.created === filterOriginType)
+              : [...state.allGamesCopy].filter((game) => game.created === filterOriginType);
+          }
+        
+          // Si hay un filtro previo (por género, etc.) y se selecciona "All Origin", mantener ese filtro
+          if (state.filters && filterOriginType === "all") {
+            originFiltered = [...state.allGamesFiltered];
+          }
+        
+          return {
+            ...state,
+            allGames: [...originFiltered].slice(0, ITEMS_PER_PAGE),
+            allGamesFiltered: originFiltered,
             currentPage: 0,
             filters: true,
         };

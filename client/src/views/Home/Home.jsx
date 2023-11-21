@@ -1,7 +1,7 @@
-import { useEffect , useState} from "react";
+import { useEffect} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CardsContainer from "../../components/CardsContainer/CardsContainer";
-import { getAllGames, changePage, getAllGenres, gamesFilter, filterByGenre,filterByRating} from "../../redux/actions/actions";
+import { getAllGames, changePage, getAllGenres, gamesFilter, filterByGenre,filterByRating, filterByOrigin} from "../../redux/actions/actions";
 
 const Home = () => {
   const dispatch = useDispatch(); //Le mando una actions a mi store.
@@ -36,20 +36,20 @@ const Home = () => {
     dispatch(filterByRating(event.target.value))
   }
 
-  //Aplico Esto para realizar la busqueda por origen.
-  const [selectedOrigin, setSelectedOrigin] = useState("all");
+//   //Aplico Esto para realizar la busqueda por origen.
+//   const [selectedOrigin, setSelectedOrigin] = useState("all");
   
-const filteredByOrigin = allGames.filter(game => {
-  if (selectedOrigin === "db"){
-    return game.created === true;
-  }else if (selectedOrigin === "api"){
-    return game.created === false;
-  }
-  return true
-})
+// const filteredByOrigin = allGames.filter(game => {
+//   if (selectedOrigin === "db"){
+//     return game.created === true;
+//   }else if (selectedOrigin === "api"){
+//     return game.created === false;
+//   }
+//   return true
+// })
 
 const filterOrigin = (event)=> {
-  setSelectedOrigin(event.target.value)
+  dispatch(filterByOrigin(event.target.value))
 }
   
   return (
@@ -89,7 +89,7 @@ const filterOrigin = (event)=> {
         <button onClick={pagination} name="prev">{"<<"}</button>
         <button onClick={pagination} name="next">{">>"}</button> 
       </div>
-      <CardsContainer allGames={filteredByOrigin} />  
+      <CardsContainer allGames={allGames} />  
     </div>
   );
 };
