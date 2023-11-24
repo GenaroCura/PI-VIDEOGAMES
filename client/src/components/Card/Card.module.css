@@ -1,25 +1,30 @@
-.CardContainer{
-    background-color: #f8b595;
-    position: fixed;
+.CardContainer {
+    background-color: #4f3b78;
+    position: relative;
     display: flex;
-    width: 14rem;
+    width: 13rem;
     flex-direction: column;
     align-items: center;
     border-radius: 8px;
-    border: solid #6c5b7c;
+    border: solid #927fbf;
     padding: 20px;
     margin: 10px;
-    position: relative; 
-    backface-visibility: hidden;
-    transform: translateZ(0);
-    transition: transform 0.25s ease-out;
-}
-
-.CardContainer:hover{
+    transition: transform 0.25s ease-out, box-shadow 0.3s ease-out, opacity 0.3s ease-out;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    opacity: 0.8;
+    color: #f4e022;
+  }
+  
+  .CardContainer:hover {
     transform: scale(1.05);
-}
-
-.CardContainer img{
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .CardContainer img {
     width: 100%;
     border-radius: 10px;
+  }
+
+.CardContainer h4{
+  font-weight: 200;
 }

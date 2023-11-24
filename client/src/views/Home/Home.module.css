@@ -1,0 +1,44 @@
+.HomeContainer{
+    color: #f4e022;
+}
+
+.FilterContainer {
+    background-color: #927fbf;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    margin-left: 10rem;
+    margin-right: 10rem;
+    align-items: center;
+    justify-content: space-between;
+    opacity: 0.9;
+    border-radius: 10px;
+  }
+
+.ButtonPag{
+    display: flex;
+    cursor: pointer;
+}
+
+
+.ButtonPag img{
+    width: 20%;
+}
+
+.ButtonPag img:hover{
+    background-color: #f4e022;
+    width: auto;
+    border-radius: 10px;
+    border: none;
+}
+
+
+.FilterContainer select{
+    background-color: #927fbf;
+}
+
+
+.FilterContainer img{
+    margin-left: 10px;
+    cursor: pointer;
+}

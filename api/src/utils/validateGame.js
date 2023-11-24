@@ -10,7 +10,6 @@ const validateGame = (req,res,next) => {
     if (!released) return res.status(400).json({error: "Missing released"});
     if (!rating) return res.status(400).json({error: "Missing rating"});
     if (!genres) return res.status(400).json({error: "Missing genres"});
-
     next();
 }
 

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { clearDetail, getGameById } from "../../redux/actions/actions";
-
+import style from "./Detail.module.css";
 const Detail = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -20,32 +20,40 @@ const Detail = () => {
     navigate(-1);
   };
 
-  const renderPlatforms = () => {
-    if (detail.platforms && detail.platforms.length > 0) {
-      return detail.platforms.map((platform) => {
-        if (typeof platform === "string") {
-          // Si es una cadena (proviene de la base de datos)
-          return platform;
-        } else if (platform.platform && platform.platform.name) {
-          // Si es un objeto (proviene de la API)
-          return platform.platform.name;
-        }
-        return null;
-      }).filter(platform => platform).join(", ");
-    }
-    return "Not available";
-  };
+  //Para mapear mas sencillo la info de las plataformas.
+  const platforms=[]
+  let newPlatforms="";
+
+  if(Number.isInteger(detail.id)){
+    detail.platforms?.forEach((element)=>{
+      if(!platforms.includes(element.platform.name)){
+        platforms.push(element.platform.name)
+      }
+    })
+  }else{
+    detail.platforms?.forEach(platform => {
+      return(newPlatforms+= `${platform} `)
+    })
+  }
+
+
+
+  //Realizo esto para sacar las etiquetas html de la descripcion 
+  const regex = /<\/?[a-z][\s\S]*?>/ig;
+  const description = detail.description?.replace(regex,"");
 
   return (
-    <div>
+    <div className={style.DetailContainer}>
       <h1>Id: {detail.id}</h1>
       <img src={detail.image} alt="" />
-      <h2>{detail.name}</h2>
+      <h2>Name: {detail.name}</h2>
       <h3>Rating: {detail.rating}</h3>
       <h3>Released: {detail.released}</h3>
-      <h3>Platforms: {renderPlatforms()}</h3>
+
+      {Number.isInteger(detail.id)?<h4>Platforms: {platforms.join(" , ")}</h4>:<h4>Platforms: {newPlatforms}</h4>}
+
       <h3>Genres: {detail.genres?.map((genre) => genre.name).join(", ")}</h3>
-      <p>{detail.description}</p>
+      <p>{description}</p>
       <button onClick={handleBack}>Back</button>
     </div>
   );

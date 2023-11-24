@@ -24,7 +24,6 @@ const IMAGE_DEFAULT = require("../utils/IMAGE_DEFAULT");
                  attributes:["name"],
                  through:{attributes:[]}
                }
-
            ]});
            return dbGame
        }
@@ -61,7 +60,6 @@ const getAllGame = async () => {
       },
     ],
   });
-
   
   //Cada Pagina de la api tiene 20 juegos, por lo que hago 5 peticiones y me da un total de 100 juegos.
   for (let aux = 1; aux <= 5; aux++) {
@@ -116,11 +114,11 @@ const getGameByName = async (name) => {
     );
     if (apiResponse.data.results) {
       const gamesApi = cleanAPI(apiResponse.data.results);
-      games.push(...gamesApi); // Agrega los juegos de la API al array games
+      games.push(...gamesApi); // Agrego los juegos de la API al array games
     }
   }
 
-  // Filtra los juegos por nombre que coincidan con el valor proporcionado (ignorando mayúsculas y minúsculas).
+  // Aca Filtro los juegos por nombre que coincidan con el valor proporcionado (ignorando mayúsculas y minúsculas).
   const filteredGamesAPI = games.filter((game) =>
     game.name.toLowerCase().includes(Name)
   );
@@ -128,7 +126,7 @@ const getGameByName = async (name) => {
   const result = [...filteredGamesAPI, ...gamesDB];
  
   if (result.length > 0) {
-    return result.slice(0, 15); // Limita el resultado a los primeros 15 juegos
+    return result.slice(0,100); 
   } else {
     throw new Error("No se encontraron juegos con ese nombre");
   }

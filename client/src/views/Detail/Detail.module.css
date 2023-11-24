@@ -1,0 +1,66 @@
+/* Detail.module.css */
+
+.DetailContainer {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #4f3b78;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border: solid #927fbf;
+    opacity: 0.9;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  }
+  
+  .DetailContainer img {
+    max-width: 50%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .DetailContainer h1, .DetailContainer h2, .DetailContainer h3, .DetailContainer h4 {
+    color: #f4e022;
+  }
+  
+  .DetailContainer h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .DetailContainer h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .DetailContainer h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .DetailContainer h4 {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .DetailContainer p {
+    line-height: 1.5;
+    color:#f4e022;
+  }
+  
+  .DetailContainer button {
+    padding: 10px 15px;
+    background-color: #f4e022;
+    color: #4f3b78;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .DetailContainer button:hover{
+    background-color: #927fbf;
+    transition: 0.3s;
+  }
+  
+  

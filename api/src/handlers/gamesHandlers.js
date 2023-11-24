@@ -27,12 +27,12 @@ const getAllGameHandler = async (req, res) => {
       res.status(200).json(allGames);
     }
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
 const createVideoGameHandler = async (req, res) => {
-  const { name, description, platforms, image, released, rating, genres } =
+  const { name, description, platforms, image, released, rating, genres} =
     req.body;
   try {
     const result = await createVideoGame(
@@ -42,7 +42,7 @@ const createVideoGameHandler = async (req, res) => {
       image,
       released,
       rating,
-      genres
+      genres,
     );
     res.status(200).json(result);   
   } catch (error) {

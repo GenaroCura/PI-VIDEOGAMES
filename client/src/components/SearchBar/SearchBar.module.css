@@ -1,0 +1,14 @@
+.SearchBarContainer{
+    position: absolute;
+    margin-left: 70rem;
+}
+.SearchBarContainer input{
+    background-color: #f4e022;
+    color: #927fbf;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.SearchBarContainer img {
+    color: #927fbf;
+    width: 40%;
+} 
+

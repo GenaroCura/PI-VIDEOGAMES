@@ -1,22 +1,31 @@
 /* eslint-disable no-empty */
 import axios from "axios";
-import { DETAIL_GAME, GET_ALLGAMES, GET_ALLGENRES, SEARCH_GAME, CLEAR_DETAIL, PAGINATION, FILTER,FILTER_BY_GENRE,FILTER_BY_RATING, FILTER_BY_ORIGIN} from "./actionsTypes";
+import { DETAIL_GAME, GET_ALLGAMES, GET_ALLGENRES, SEARCH_GAME, CLEAR_DETAIL, PAGINATION, FILTER,FILTER_BY_GENRE,FILTER_BY_RATING,FILTER_BY_ORIGIN,RESET} from "./actionsTypes";
 
 export const getAllGames = () => {
     return async function (dispatch){
         try {
-            const {data} = await axios.get("http://localhost:3001/videogames")
+            console.log("URL de la solicitud:", "http://localhost:3001/videogames");
+const { data } = await axios.get("http://localhost:3001/videogames");
+            console.log({data})
             dispatch({
                 type: GET_ALLGAMES,
                 payload: data
             })
         } catch (error) {
             console.log(error)
-            
         }
     }
 };
 
+
+export const reset = () => {
+    return (dispatch) => {
+        dispatch({
+            type: RESET
+        })
+    }
+};
 export const clearDetail = () => {
     return (dispatch) => {
       dispatch({
@@ -116,26 +125,24 @@ export const filterByRating = (value) => {
     }
 };
 
-export const postVideoGame = (body) =>{
-    // eslint-disable-next-line no-unused-vars
-    return async function (dispatch){
-        try {
-            console.log(body)
-            await axios.post("http://localhost:3001/videogames",body)
-            alert("Successfully created videogame")
-        } catch (error) {
-            alert("Error al crear un videogame")
-            
-        }
-    }
-};
+export const postVideoGame = (body) => {
+    return async function (){
+      try {
+        await axios.post("http://localhost:3001/videogames", body);
+        alert("Successfully created videogame");
+      } catch (error) {
+        alert("Error creating videogame");
+        console.error("Error al crear el videojuego:", error);
+      }
+    };
+  };
 
 
 export const filterByOrigin = (origin) => {
     return function (dispatch){
         dispatch({
             type: FILTER_BY_ORIGIN,
-            payload: origin
+            payload: origin,
         })
     }
 };

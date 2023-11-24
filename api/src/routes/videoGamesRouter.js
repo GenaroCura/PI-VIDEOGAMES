@@ -5,7 +5,7 @@ const {validateGame} = require("../utils/validateGame");
 const gamesRouter = Router();
 
 
-gamesRouter.get("/", getAllGameHandler);
+gamesRouter.get("/",getAllGameHandler);
 gamesRouter.get("/:id", getDetailGameHandler);
 gamesRouter.post("/",validateGame, createVideoGameHandler);
 
